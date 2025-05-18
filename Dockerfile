@@ -1,13 +1,15 @@
+# Composer image
 FROM composer:2.8.8 AS composer
 
 COPY . /app
 
 RUN composer install --optimize-autoloader --no-interaction --no-progress && \
-	composer dump-autoload --optimize && \
-	composer migrate
+	composer dump-autoload --optimize
+
+
+# Base image for PHP and Nginx
 
 FROM trafex/php-nginx:3.9.0
-
 
 USER root
 
