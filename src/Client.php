@@ -6,7 +6,8 @@ use stdClass;
 use Exception;
 use CurlHandle;
 
-class Client {
+class Client
+{
 	private false|CurlHandle $curl;
 	public string $baseUrl;
 	protected bool $object = true;
@@ -17,7 +18,8 @@ class Client {
 	/**
 	 * @param array $options
 	 */
-	public final function __construct(array $options = []) {
+	public final function __construct(array $options = [])
+	{
 		$this->curl = curl_init();
 		$this->baseUrl = $options['baseUrl'] ?? '';
 		$this->object = $options['object'] ?? true;
@@ -30,7 +32,8 @@ class Client {
 	/**
 	 * @throws Exception
 	 */
-	final public function get(string $endpoint, ?array $options = []): array|stdClass {
+	final public function get(string $endpoint, ?array $options = []): array|stdClass
+	{
 		return $this->request($endpoint, array_merge($options, [
 			'method' => 'GET',
 		]));
@@ -42,7 +45,8 @@ class Client {
 	 * @return array|stdClass
 	 * @throws Exception
 	 */
-	final public function post(string $endpoint, ?array $options = []): array|stdClass {
+	final public function post(string $endpoint, ?array $options = []): array|stdClass
+	{
 		return $this->request($endpoint, array_merge($options, [
 			'method' => 'POST',
 			'headers' => [
@@ -57,7 +61,8 @@ class Client {
 	 * @return array|stdClass
 	 * @throws Exception
 	 */
-	final public function put(string $endpoint, ?array $options = []): array|stdClass {
+	final public function put(string $endpoint, ?array $options = []): array|stdClass
+	{
 		return $this->request($endpoint, array_merge($options, [
 			'method' => 'PUT',
 			'headers' => [
@@ -69,7 +74,8 @@ class Client {
 	/**
 	 * @throws Exception
 	 */
-	final public function patch(string $endpoint, ?array $options = []): array|stdClass {
+	final public function patch(string $endpoint, ?array $options = []): array|stdClass
+	{
 		return $this->request($endpoint, array_merge($options, [
 			'method' => 'PATCH',
 			'headers' => [
@@ -84,7 +90,8 @@ class Client {
 	 * @return array|stdClass
 	 * @throws Exception
 	 */
-	final public function delete(string $endpoint, ?array $options = []): array|stdClass {
+	final public function delete(string $endpoint, ?array $options = []): array|stdClass
+	{
 		return $this->request($endpoint, array_merge($options, [
 			'method' => 'DELETE',
 		]));
@@ -96,7 +103,8 @@ class Client {
 	 * @return array|stdClass
 	 * @throws Exception
 	 */
-	final public function request(string $endpoint, ?array $options = []): array|stdClass {
+	final public function request(string $endpoint, ?array $options = []): array|stdClass
+	{
 		try {
 			$curl = $this->curl;
 			list($method, $endpoint, $headers, $data) = $this->prepareRequestParams($options, $endpoint);
@@ -109,7 +117,7 @@ class Client {
 				'data' => $body,
 				'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE) ?? 200,
 			]);
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
 	}
@@ -117,14 +125,16 @@ class Client {
 	/**
 	 * @return bool
 	 */
-	public function isObject(): bool {
+	public function isObject(): bool
+	{
 		return $this->object;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getHeaders(): array {
+	public function getHeaders(): array
+	{
 		return $this->headers;
 	}
 
@@ -132,7 +142,8 @@ class Client {
 	 * @param array $headers
 	 * @return array
 	 */
-	final public function makeHeaders(array $headers = []): array {
+	final public function makeHeaders(array $headers = []): array
+	{
 		return $this->utils->makeHeaders($headers);
 	}
 
@@ -140,7 +151,8 @@ class Client {
 	 * @param array $response
 	 * @return array|stdClass
 	 */
-	private function makeResponse(array $response = []): array|stdClass {
+	private function makeResponse(array $response = []): array|stdClass
+	{
 		return $this->utils->makeResponse($response);
 	}
 
@@ -148,20 +160,22 @@ class Client {
 	 * @param string $raw_headers
 	 * @return array|stdClass
 	 */
-	private function parseResponseHeaders(string $raw_headers): array|stdClass {
+	private function parseResponseHeaders(string $raw_headers): array|stdClass
+	{
 		return $this->utils->parseResponseHeaders($raw_headers);
 	}
 
 
-    /**
-     * @param CurlHandle $curl
-     * @param string $endpoint
-     * @param string $method
-     * @param array $headers
-     * @param array $data
-     * @return void
-     */
-	private function setCurlOptions(CurlHandle $curl, string $endpoint, string $method, array $headers, array $data): void {
+	/**
+	 * @param CurlHandle $curl
+	 * @param string $endpoint
+	 * @param string $method
+	 * @param array $headers
+	 * @param array $data
+	 * @return void
+	 */
+	private function setCurlOptions(CurlHandle $curl, string $endpoint, string $method, array $headers, array $data): void
+	{
 		$this->utils->setCurlOptions($curl, $endpoint, $method, $headers, $data);
 	}
 
@@ -169,7 +183,8 @@ class Client {
 	 * @param string $response
 	 * @return array|object
 	 */
-	private function parseResponse(string $response) {
+	private function parseResponse(string $response)
+	{
 		return $this->utils->parseResponseBody($response);
 	}
 
@@ -178,7 +193,8 @@ class Client {
 	 * @param bool|string $response
 	 * @return array
 	 */
-	private function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array {
+	private function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array
+	{
 		return $this->utils->extractHeadersAndBody($curl, $response);
 	}
 
@@ -187,26 +203,29 @@ class Client {
 	 * @param string $endpoint
 	 * @return array
 	 */
-	private function prepareRequestParams(?array $options, string $endpoint): array {
+	private function prepareRequestParams(?array $options, string $endpoint): array
+	{
 		return $this->utils->prepareRequestParams($options, $endpoint);
 	}
 
 
-    /**
-     * @param CurlHandle|bool $curl
-     * @return bool|string
-     * @throws HTTPException
-     */
-	private function executeCurlAndRetryOnSSLError(CurlHandle|bool $curl): string|bool {
+	/**
+	 * @param CurlHandle|bool $curl
+	 * @return bool|string
+	 * @throws HTTPException
+	 */
+	private function executeCurlAndRetryOnSSLError(CurlHandle|bool $curl): string|bool
+	{
 		return $this->utils->executeCurlAndRetryOnSSLError($curl);
 	}
 
 
 	/**
-	 *
+	 * @return void
 	 */
-	final public function __destruct() {
-		if($this->curl) {
+	final public function __destruct()
+	{
+		if ($this->curl) {
 			curl_close($this->curl);
 		}
 	}

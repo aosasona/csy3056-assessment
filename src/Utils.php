@@ -3,25 +3,26 @@
 namespace Burrow;
 
 use CurlHandle;
-use Burrow\HTTPException as HTTPException;
+use Burrow\HttpException as HttpException;
 use stdClass;
 
-class Utils {
+class Utils
+{
 	private Client $client;
 	private Serializers $serializers;
 
-	public function __construct(Client $client) {
+	public function __construct(Client $client)
+	{
 		$this->client = $client;
 		$this->serializers = new Serializers($this);
 	}
-
-
 
 	/**
 	 * @param string $response
 	 * @return array|object
 	 */
-	public function parseResponseBody(string $response) {
+	public function parseResponseBody(string $response)
+	{
 		return $this->serializers->parseResponseBody($response);
 	}
 
@@ -29,7 +30,8 @@ class Utils {
 	 * @param string $raw_headers
 	 * @return array|stdClass
 	 */
-	public function parseResponseHeaders(string $raw_headers): array|stdClass {
+	public function parseResponseHeaders(string $raw_headers): array|stdClass
+	{
 		return $this->serializers->parseResponseHeaders($raw_headers);
 	}
 
@@ -37,8 +39,9 @@ class Utils {
 	 * @param array $response
 	 * @return array|stdClass
 	 */
-	public function makeResponse(array $response = []): array|stdClass {
-		if($this->client->isObject()) {
+	public function makeResponse(array $response = []): array|stdClass
+	{
+		if ($this->client->isObject()) {
 			return (object)$response;
 		}
 		return $response;
@@ -48,13 +51,14 @@ class Utils {
 	 * @param array $headers
 	 * @return array
 	 */
-	public final function makeHeaders(array $headers = []): array {
+	public final function makeHeaders(array $headers = []): array
+	{
 		$finalHeaders = [];
-		if(count($this->client->getHeaders()) > 0) {
+		if (count($this->client->getHeaders()) > 0) {
 			$headers = array_merge($this->client->getHeaders(), $headers);
 		}
-		if(count($headers) > 0) {
-			foreach($headers as $key => $value) {
+		if (count($headers) > 0) {
+			foreach ($headers as $key => $value) {
 				$key = ucwords(trim($key));
 				$finalHeaders[] = "$key: $value";
 			}
@@ -68,7 +72,8 @@ class Utils {
 	 * @param string $endpoint
 	 * @return array
 	 */
-	public function prepareRequestParams(?array $options, string $endpoint): array {
+	public function prepareRequestParams(?array $options, string $endpoint): array
+	{
 		$method = strtoupper($options['method'] ?? 'GET');
 		$endpoint = trim($endpoint, '/');
 		$headers = $this->makeHeaders($options['headers'] ?? []);
@@ -76,45 +81,46 @@ class Utils {
 		return array($method, $endpoint, $headers, $data);
 	}
 
-    /**
-     * @param CurlHandle $curl
-     * @param string $endpoint
-     * @param string $method
-     * @param array $headers
-     * @param array $data
-     * @return void
-     */
-    public function setCurlOptions(CurlHandle $curl, string $endpoint, string $method, array $headers, array $data): void {
-        $uri = $this->client->baseUrl ? $this->client->baseUrl.'/'.$endpoint : $endpoint;
-        $default_options = [
-            CURLOPT_URL => $uri,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 20,
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_CUSTOMREQUEST => $method,
-            CURLOPT_FAILONERROR => true,
-            CURLOPT_HEADER => true,
-            CURLOPT_POSTFIELDS => json_encode($data),
-        ];
-        curl_setopt_array($curl, $default_options);
-    }
+	/**
+	 * @param CurlHandle $curl
+	 * @param string $endpoint
+	 * @param string $method
+	 * @param array $headers
+	 * @param array $data
+	 * @return void
+	 */
+	public function setCurlOptions(CurlHandle $curl, string $endpoint, string $method, array $headers, array $data): void
+	{
+		$uri = $this->client->baseUrl ? $this->client->baseUrl . '/' . $endpoint : $endpoint;
+		$default_options = [
+			CURLOPT_URL => $uri,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_MAXREDIRS => 20,
+			CURLOPT_HTTPHEADER => $headers,
+			CURLOPT_CUSTOMREQUEST => $method,
+			CURLOPT_FAILONERROR => true,
+			CURLOPT_HEADER => true,
+			CURLOPT_POSTFIELDS => json_encode($data),
+		];
+		curl_setopt_array($curl, $default_options);
+	}
 
-    /**
-     * @param CurlHandle|bool $curl
-     * @return bool|string|array
-     * @throws HttpException
-     */
+	/**
+	 * @param CurlHandle|bool $curl
+	 * @return bool|string|array
+	 * @throws HttpException
+	 */
 	public function executeCurlAndRetryOnSSLError(CurlHandle|bool $curl): bool|string|array
-    {
-		if(!$response = curl_exec($curl)) {
+	{
+		if (!$response = curl_exec($curl)) {
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            $response = curl_exec($curl);
-            if(curl_errno($curl)){
-                $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-                $message = curl_error($curl);
-                throw new HttpException($message, $status_code);
-            }
+			$response = curl_exec($curl);
+			if (curl_errno($curl)) {
+				$status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+				$message = curl_error($curl);
+				throw new HttpException($message, $status_code);
+			}
 		}
 		return $response;
 	}
@@ -125,7 +131,8 @@ class Utils {
 	 * @param bool|string $response
 	 * @return array
 	 */
-	public function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array {
+	public function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array
+	{
 		$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
 		$headers = substr($response, 0, $header_size);
 		$body = substr($response, $header_size);
@@ -139,7 +146,8 @@ class Utils {
 	/**
 	 * @return Client
 	 */
-	public function getClient(): Client {
+	public function getClient(): Client
+	{
 		return $this->client;
 	}
 }

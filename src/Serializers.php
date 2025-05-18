@@ -4,10 +4,12 @@ namespace Burrow;
 
 use stdClass;
 
-class Serializers {
+class Serializers
+{
 	private Utils $utils;
 
-	public function __construct(Utils $utils) {
+	public function __construct(Utils $utils)
+	{
 		$this->utils = $utils;
 	}
 
@@ -15,9 +17,10 @@ class Serializers {
 	 * @param string $response
 	 * @return array|object
 	 */
-	public function parseResponseBody(string $response) {
+	public function parseResponseBody(string $response)
+	{
 		$response = json_decode($response);
-		if($this->utils->getClient()->isObject()) {
+		if ($this->utils->getClient()->isObject()) {
 			return (object)$response;
 		}
 		return (array)$response;
@@ -27,21 +30,22 @@ class Serializers {
 	 * @param string $raw_headers
 	 * @return array|stdClass
 	 */
-	public function parseResponseHeaders(string $raw_headers): array|stdClass {
+	public function parseResponseHeaders(string $raw_headers): array|stdClass
+	{
 		$headers = [];
 		$raw_headers = explode("\r", $raw_headers);
-		foreach($raw_headers as $header) {
-			if(!strpos($header, ':')) {
+		foreach ($raw_headers as $header) {
+			if (!strpos($header, ':')) {
 				continue;
 			}
 			$header = explode(':', $header, 2);
 			$key = strtolower(trim($header[0]));
 			$value = strtolower(trim($header[1]));
-			if($key) {
+			if ($key) {
 				$headers[$key] = $value;
 			}
 		}
-		if($this->utils->getClient()->isObject()) {
+		if ($this->utils->getClient()->isObject()) {
 			return (object)$headers;
 		}
 		return $headers;
