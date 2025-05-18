@@ -2,27 +2,30 @@
 
 namespace Burrow;
 
-use CurlHandle;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
 
-class ClientTest extends TestCase {
+class ClientTest extends TestCase
+{
 
 	private string $url;
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->url = "https://jsonplaceholder.typicode.com/posts";
 	}
 
 
-	public function testConstruct() {
+	public function testConstruct(): void
+	{
 		$client = new Client();
 		$this->assertInstanceOf(Client::class, $client);
 	}
 
-	public function testBaseURL() {
+	public function testBaseURL(): void
+	{
 		$testURL = $this->url;
 		$client = new Client([
 			'baseUrl' => $testURL,
@@ -32,21 +35,24 @@ class ClientTest extends TestCase {
 		$this->assertEquals('string', gettype($client->baseUrl));
 	}
 
-	public function testMakeHeaders() {
+	public function testMakeHeaders(): void
+	{
 		$client = new Client();
 		$headers = $client->makeHeaders([
 			'Content-Type' => 'text/html',
 			'Accept' => 'application/json',
 		]);
 		$this->assertEquals(
-			array('Content-Type: text/html', 'Accept: application/json')
-			, $headers);
+			array('Content-Type: text/html', 'Accept: application/json'),
+			$headers
+		);
 	}
 
 	/**
 	 * @throws Exception
 	 */
-	public function testRequestAsArray() {
+	public function testRequestAsArray(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -64,7 +70,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testRequestAsObject() {
+	public function testRequestAsObject(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -82,7 +89,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testGetAsArray() {
+	public function testGetAsArray(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -97,7 +105,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testGetAsObject() {
+	public function testGetAsObject(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -112,7 +121,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testPostAsArray() {
+	public function testPostAsArray(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -131,7 +141,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testPostAsObject() {
+	public function testPostAsObject(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -150,7 +161,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testDeleteShouldNotReturnBody() {
+	public function testDeleteShouldNotReturnBody(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -165,7 +177,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testPutShouldReplaceAllData() {
+	public function testPutShouldReplaceAllData(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
@@ -187,7 +200,8 @@ class ClientTest extends TestCase {
 	/**
 	 * @throws Exception
 	 */
-	public function testPatchShouldReplacePartially() {
+	public function testPatchShouldReplacePartially(): void
+	{
 		$testURI = $this->url;
 		$client = new Client(
 			[
