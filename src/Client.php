@@ -1,6 +1,6 @@
 <?php
 
-namespace Trulyao\NeatHttp;
+namespace Burrow;
 
 use stdClass;
 use Exception;

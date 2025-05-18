@@ -1,9 +1,9 @@
 <?php
 
-namespace Trulyao\NeatHttp;
+namespace Burrow;
 
 use CurlHandle;
-use Trulyao\NeatHttp\HTTPException as HTTPException;
+use Burrow\HTTPException as HTTPException;
 use stdClass;
 
 class Utils {

@@ -18,7 +18,7 @@ composer require trulyao/neat-http
 ```php
 <?php
 
-use Trulyao\NeatHttp\Client;
+use Burrow\Client;
 
 $client = new Client(
     [
