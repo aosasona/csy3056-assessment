@@ -44,7 +44,7 @@ class ClientTest extends TestCase
 	public function testMakeHeaders(): void
 	{
 		$client = new Client();
-		$headers = $client->mergeHeaders([
+		$headers = $client->makeHeaders([
 			'Content-Type' => 'text/html',
 			'Accept' => 'application/json',
 		]);

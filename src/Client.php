@@ -19,7 +19,6 @@ class Client
 	protected array $headers = [];
 	private Utils $utils;
 
-
 	/**
 	 * Client constructor.
 	 *
@@ -217,14 +216,16 @@ class Client
 	}
 
 	/**
-	 * Merge headers with the default headers.
+	 * Format the headers array to a proper HTTP header format.
+	 *
+	 * WARNING: this will override the headers set in the constructor if provided here
 	 *
 	 * @param array $headers
 	 * @return array
 	 */
-	final public function mergeHeaders(array $headers = []): array
+	final public function makeHeaders(array $headers = []): array
 	{
-		return $this->utils->mergeHeaders($headers);
+		return $this->utils->makeHeaders($headers);
 	}
 
 	/**

@@ -55,7 +55,7 @@ class Utils
 	 * @param array $headers
 	 * @return array
 	 */
-	public function mergeHeaders(array $headers = []): array
+	public function makeHeaders(array $headers = []): array
 	{
 		$finalHeaders = [];
 		if (count($this->client->getHeaders()) > 0) {
@@ -80,7 +80,7 @@ class Utils
 	{
 		$method = strtoupper($options['method'] ?? 'GET');
 		$endpoint = trim($endpoint, '/');
-		$headers = $this->mergeHeaders($options['headers'] ?? []);
+		$headers = $this->makeHeaders($options['headers'] ?? []);
 		$data = $options['data'] ?? [];
 		return array($method, $endpoint, $headers, $data);
 	}
@@ -95,19 +95,35 @@ class Utils
 	 */
 	public function setCurlOptions(CurlHandle $curl, string $endpoint, string $method, array $headers, array $data): void
 	{
+		$options = $this->buildCurlOptions($endpoint, $method, $headers, $data);
+		curl_setopt_array($curl, $options);
+	}
+
+
+	/**
+	 * Builds the cURL options for the request.
+	 *
+	 * @param string $endpoint
+	 * @param string $method
+	 * @param array $headers
+	 * @param array $data
+	 * @return array
+	 */
+	public function buildCurlOptions(string $endpoint, string $method, array $headers, array $data): array
+	{
 		$uri = $this->client->baseUrl ? $this->client->baseUrl . '/' . $endpoint : $endpoint;
 		$default_options = [
-			CURLOPT_URL => $uri,
+			CURLOPT_URL => rtrim($uri, '/'),
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_MAXREDIRS => 20,
-			CURLOPT_HTTPHEADER => $headers,
+			CURLOPT_HTTPHEADER => $this->makeHeaders($headers),
 			CURLOPT_CUSTOMREQUEST => $method,
 			CURLOPT_FAILONERROR => true,
 			CURLOPT_HEADER => true,
 			CURLOPT_POSTFIELDS => json_encode($data),
 		];
-		curl_setopt_array($curl, $default_options);
+		return $default_options;
 	}
 
 	/**
