@@ -1,16 +1,21 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This is a utility class for parsing http response body and headers.
+*/
 
 namespace Burrow;
 
 use stdClass;
 
-class Serializers
+class Serializer
 {
-	private Utils $utils;
+	private Client $client;
 
-	public function __construct(Utils $utils)
+	public function __construct(Client $client)
 	{
-		$this->utils = $utils;
+		$this->client = $client;
 	}
 
 	/**
@@ -20,7 +25,7 @@ class Serializers
 	public function parseResponseBody(string $response)
 	{
 		$response = json_decode($response);
-		if ($this->utils->getClient()->isObject()) {
+		if ($this->client->isObject()) {
 			return (object)$response;
 		}
 		return (array)$response;
@@ -45,9 +50,25 @@ class Serializers
 				$headers[$key] = $value;
 			}
 		}
-		if ($this->utils->getClient()->isObject()) {
+		if ($this->client->isObject()) {
+			array_map(
+				function ($key, $value) use (&$headers) {
+					unset($headers[$key]);
+					$key = $this->toCamelCase($key);
+					$headers[$key] = $value;
+				},
+				array_keys($headers),
+				$headers
+			);
 			return (object)$headers;
 		}
 		return $headers;
+	}
+
+	public static function toCamelCase(string $string): string {
+		$string = strtolower($string);
+		$string = preg_replace('/[^a-z0-9]+/i', ' ', $string);
+		$string = ucwords($string);
+		return lcfirst(str_replace(' ', '', $string));
 	}
 }

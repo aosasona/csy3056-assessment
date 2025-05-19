@@ -1,20 +1,24 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This is a utility class for parsing and constructing HTTP requests and responses.
+*/
 
 namespace Burrow;
 
 use CurlHandle;
-use Burrow\HttpException as HttpException;
 use stdClass;
 
 class Utils
 {
 	private Client $client;
-	private Serializers $serializers;
+	private Serializer $serializer;
 
 	public function __construct(Client $client)
 	{
 		$this->client = $client;
-		$this->serializers = new Serializers($this);
+		$this->serializer = new Serializer($client);
 	}
 
 	/**
@@ -23,7 +27,7 @@ class Utils
 	 */
 	public function parseResponseBody(string $response)
 	{
-		return $this->serializers->parseResponseBody($response);
+		return $this->serializer->parseResponseBody($response);
 	}
 
 	/**
@@ -32,7 +36,7 @@ class Utils
 	 */
 	public function parseResponseHeaders(string $raw_headers): array|stdClass
 	{
-		return $this->serializers->parseResponseHeaders($raw_headers);
+		return $this->serializer->parseResponseHeaders($raw_headers);
 	}
 
 	/**

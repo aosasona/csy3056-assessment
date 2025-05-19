@@ -1,4 +1,9 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This is a custom exception class for handling HTTP errors in the Burrow application.
+*/
 
 namespace Burrow;
 

@@ -1,4 +1,10 @@
 <?php
+/*
+ * Author: Ayodeji O.
+ *
+ * This is a test class for the Burrow HTTP client.
+ * It contains various test cases to ensure the functionality of the client.
+ */
 
 namespace Burrow;
 

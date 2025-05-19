@@ -1,4 +1,9 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This is the main class that wraps the cURL library to safely and easily make HTTP requests.
+*/
 
 namespace Burrow;
 
@@ -20,6 +25,18 @@ class Client
 	 */
 	public final function __construct(array $options = [])
 	{
+		if (!empty($options['baseUrl']) && !is_string($options['baseUrl'])) {
+			throw new Exception('`baseUrl` must be a string');
+		}
+
+		if (!empty($options['object']) && !is_bool($options['object'])) {
+			throw new Exception('`object` must be a boolean');
+		}
+
+		if (!empty($options['headers']) && !is_array($options['headers'])) {
+			throw new Exception('`headers` must be an array');
+		}
+
 		$this->curl = curl_init();
 		$this->baseUrl = $options['baseUrl'] ?? '';
 		$this->object = $options['object'] ?? true;
