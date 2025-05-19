@@ -44,7 +44,7 @@ class ClientTest extends TestCase
 	public function testMakeHeaders(): void
 	{
 		$client = new Client();
-		$headers = $client->makeHeaders([
+		$headers = $client->mergeHeaders([
 			'Content-Type' => 'text/html',
 			'Accept' => 'application/json',
 		]);
@@ -220,5 +220,67 @@ class ClientTest extends TestCase
 		]]);
 		$this->assertEquals('1', $response->data->userId);
 		$this->assertEquals('updated', $response->data->body);
+	}
+
+	public function testGetHeader(): void
+	{
+		$testURI = $this->url;
+		$client = new Client(
+			[
+				'baseUrl' => $testURI,
+				'object' => false,
+			]
+		);
+		$client->setHeaders([
+			'Content-Type' => 'application/json',
+			'Accept' => 'application/json',
+		]);
+		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
+	}
+
+	public function testSetHeaders(): void
+	{
+		$testURI = $this->url;
+		$client = new Client(
+			[
+				'baseUrl' => $testURI,
+				'object' => false,
+			]
+		);
+		$client->setHeaders([
+			'Content-Type' => 'application/json',
+			'Accept' => 'application/json',
+		]);
+		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
+	}
+
+	public function testSetHeader(): void
+	{
+		$testURI = $this->url;
+		$client = new Client(
+			[
+				'baseUrl' => $testURI,
+				'object' => false,
+			]
+		);
+		$client->setHeader('Content-Type', 'application/json');
+		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
+	}
+
+	public function testRemoveHeader(): void
+	{
+		$testURI = $this->url;
+		$client = new Client(
+			[
+				'baseUrl' => $testURI,
+				'object' => false,
+			]
+		);
+		$client->setHeaders([
+			'Content-Type' => 'application/json',
+			'Accept' => 'application/json',
+		]);
+		$client->removeHeader('Content-Type');
+		$this->assertNull($client->getHeader('Content-Type'));
 	}
 }

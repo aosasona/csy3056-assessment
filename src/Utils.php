@@ -55,7 +55,7 @@ class Utils
 	 * @param array $headers
 	 * @return array
 	 */
-	public final function makeHeaders(array $headers = []): array
+	public function mergeHeaders(array $headers = []): array
 	{
 		$finalHeaders = [];
 		if (count($this->client->getHeaders()) > 0) {
@@ -80,7 +80,7 @@ class Utils
 	{
 		$method = strtoupper($options['method'] ?? 'GET');
 		$endpoint = trim($endpoint, '/');
-		$headers = $this->makeHeaders($options['headers'] ?? []);
+		$headers = $this->mergeHeaders($options['headers'] ?? []);
 		$data = $options['data'] ?? [];
 		return array($method, $endpoint, $headers, $data);
 	}

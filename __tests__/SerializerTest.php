@@ -7,7 +7,6 @@
 
 namespace Burrow;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 class SerializerTest extends TestCase

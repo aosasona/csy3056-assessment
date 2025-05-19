@@ -21,6 +21,8 @@ class Client
 
 
 	/**
+	 * Client constructor.
+	 *
 	 * @param array $options
 	 */
 	public final function __construct(array $options = [])
@@ -47,6 +49,8 @@ class Client
 	}
 
 	/**
+	 * Send a GET request.
+	 *
 	 * @throws Exception
 	 */
 	final public function get(string $endpoint, ?array $options = []): array|stdClass
@@ -57,6 +61,8 @@ class Client
 	}
 
 	/**
+	 * Send a POST request.
+	 *
 	 * @param string $endpoint
 	 * @param array|null $options
 	 * @return array|stdClass
@@ -73,6 +79,8 @@ class Client
 	}
 
 	/**
+	 * Send a PUT request
+	 *
 	 * @param string $endpoint
 	 * @param array|null $options
 	 * @return array|stdClass
@@ -89,6 +97,8 @@ class Client
 	}
 
 	/**
+	 * Send a PATCH request
+	 *
 	 * @throws Exception
 	 */
 	final public function patch(string $endpoint, ?array $options = []): array|stdClass
@@ -115,6 +125,8 @@ class Client
 	}
 
 	/**
+	 * Send a request
+	 *
 	 * @param string $endpoint
 	 * @param array|null $options
 	 * @return array|stdClass
@@ -140,6 +152,8 @@ class Client
 	}
 
 	/**
+	 * Check if the response should be an object.
+	 *
 	 * @return bool
 	 */
 	public function isObject(): bool
@@ -148,6 +162,8 @@ class Client
 	}
 
 	/**
+	 * Get the headers array.
+	 *
 	 * @return array
 	 */
 	public function getHeaders(): array
@@ -156,12 +172,59 @@ class Client
 	}
 
 	/**
+	 * Get a single header from the headers array.
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function getHeader(string $key): string|null
+	{
+		return $this->headers[$key] ?? null;
+	}
+
+	/**
+	 * Set the headers array.
+	 *
+	 * @param array $headers
+	 * @return void
+	 */
+	public function setHeaders(array $headers): void
+	{
+		$this->headers = $headers;
+	}
+
+	/**
+	 * Set a single header in the headers array.
+	 *
+	 * @param string $key
+	 * @param string $value
+	 * @return void
+	 */
+	public function setHeader(string $key, string $value): void
+	{
+		$this->headers[$key] = $value;
+	}
+
+	/**
+	 * Remove an header from the headers array.
+	 *
+	 * @param string $key
+	 * @return void
+	 */
+	public function removeHeader(string $key): void
+	{
+		unset($this->headers[$key]);
+	}
+
+	/**
+	 * Merge headers with the default headers.
+	 *
 	 * @param array $headers
 	 * @return array
 	 */
-	final public function makeHeaders(array $headers = []): array
+	final public function mergeHeaders(array $headers = []): array
 	{
-		return $this->utils->makeHeaders($headers);
+		return $this->utils->mergeHeaders($headers);
 	}
 
 	/**
@@ -208,7 +271,7 @@ class Client
 	/**
 	 * @param CurlHandle|bool $curl
 	 * @param bool|string $response
-	 * @return array
+	 * @return {'headers': string, 'body': string}
 	 */
 	private function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array
 	{
