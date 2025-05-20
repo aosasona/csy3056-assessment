@@ -26,15 +26,7 @@ class Serializer
 	{
 		$response = json_decode($response, true);
 		if ($this->client->isObject()) {
-			array_map(
-				function ($key, $value) use (&$response) {
-					unset($response[$key]);
-					$key = $this->toCamelCase($key);
-					$response[$key] = $value;
-				},
-				array_keys($response),
-				$response
-			);
+			self::camelCaseArray($response);
 			return (object)$response;
 		}
 		return (array)$response;
@@ -60,27 +52,45 @@ class Serializer
 			}
 		}
 		if ($this->client->isObject()) {
-			array_map(
-				function ($key, $value) use (&$headers) {
-					unset($headers[$key]);
-					$key = $this->toCamelCase($key);
-					$headers[$key] = $value;
-				},
-				array_keys($headers),
-				$headers
-			);
+			self::camelCaseArray($headers);
 			return (object)$headers;
 		}
 		return $headers;
 	}
 
-	public static function toCamelCase(string $string): string {
-		if(!preg_match('/[^a-z0-9]+/i', $string)) {
+	public static function toCamelCase(string $string): string
+	{
+		// Remove any leading or trailing whitespace
+		$string = trim($string);
+		// If the string is already in "camel case", return it as is
+		if (!preg_match('/[^a-zA-Z0-9]+/i', $string)) {
 			return $string;
 		}
 		$string = strtolower($string);
 		$string = preg_replace('/[^a-z0-9]+/i', ' ', $string);
 		$string = ucwords($string);
 		return lcfirst(str_replace(' ', '', $string));
+	}
+
+	/**
+	 * Recursively convert all keys in an array to camel case.
+	 *
+	 * @param array $array
+	 * @return void
+	 */
+	public static function camelCaseArray(array &$array): void
+	{
+		foreach ($array as $key => &$value) {
+			// Convert the key to camel case
+			$camelCaseKey = self::toCamelCase($key);
+			if ($camelCaseKey !== $key) {
+				unset($array[$key]);
+				$array[$camelCaseKey] = $value;
+			}
+			// If the value is an array, recursively convert its keys
+			if (is_array($value)) {
+				self::camelCaseArray($value);
+			}
+		}
 	}
 }

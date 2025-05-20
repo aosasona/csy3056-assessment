@@ -99,4 +99,30 @@ class SerializerTest extends TestCase
 			$this->assertEquals($expected, $actual, "Failed for input: $input");
 		}
 	}
+
+	public function testCamelCaseNestedArray(): void
+	{
+		$input = [
+			"content-type" => "application/json",
+			"nested" => [
+				"content-length" => 123,
+				"another-nested" => [
+					"accept-encoding" => "gzip, deflate",
+				],
+			],
+		];
+
+		$expected = [
+			"contentType" => "application/json",
+			"nested" => [
+				"contentLength" => 123,
+				"anotherNested" => [
+					"acceptEncoding" => "gzip, deflate",
+				],
+			],
+		];
+
+		Serializer::camelCaseArray($input);
+		self::assertEquals($expected, $input);
+	}
 }

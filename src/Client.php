@@ -272,7 +272,7 @@ class Client
 	/**
 	 * @param CurlHandle|bool $curl
 	 * @param bool|string $response
-	 * @return {'headers': string, 'body': string}
+	 * @return array{'headers': string, 'body': string}
 	 */
 	private function extractHeadersAndBody(CurlHandle|bool $curl, bool|string $response): array
 	{
