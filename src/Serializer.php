@@ -24,8 +24,17 @@ class Serializer
 	 */
 	public function parseResponseBody(string $response)
 	{
-		$response = json_decode($response);
+		$response = json_decode($response, true);
 		if ($this->client->isObject()) {
+			array_map(
+				function ($key, $value) use (&$response) {
+					unset($response[$key]);
+					$key = $this->toCamelCase($key);
+					$response[$key] = $value;
+				},
+				array_keys($response),
+				$response
+			);
 			return (object)$response;
 		}
 		return (array)$response;
@@ -66,6 +75,9 @@ class Serializer
 	}
 
 	public static function toCamelCase(string $string): string {
+		if(!preg_match('/[^a-z0-9]+/i', $string)) {
+			return $string;
+		}
 		$string = strtolower($string);
 		$string = preg_replace('/[^a-z0-9]+/i', ' ', $string);
 		$string = ucwords($string);

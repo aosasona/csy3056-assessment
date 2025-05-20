@@ -26,12 +26,13 @@ class SerializerTest extends TestCase
 	{
 		$client = self::makeMockClient(object: false);
 		$serializer = new Serializer($client);
-		$response = '{"id": 1, "title": "Test"}';
+		$response = '{"id": 1, "title": "Test", "content_type": "application/json"}';
 		$parsedResponse = $serializer->parseResponseBody($response);
 
 		$this->assertIsArray($parsedResponse);
 		$this->assertEquals(1, $parsedResponse['id']);
 		$this->assertEquals('Test', $parsedResponse['title']);
+		$this->assertEquals('application/json', $parsedResponse['content_type']);
 	}
 
 	/**
@@ -41,12 +42,13 @@ class SerializerTest extends TestCase
 	{
 		$client = self::makeMockClient(object: true);
 		$serializer = new Serializer($client);
-		$response = '{"id": 1, "title": "Test"}';
+		$response = '{"id": 1, "title": "Test", "content_type": "application/json"}';
 		$parsedResponse = $serializer->parseResponseBody($response);
 
 		$this->assertIsObject($parsedResponse);
 		$this->assertEquals(1, $parsedResponse->id);
 		$this->assertEquals('Test', $parsedResponse->title);
+		$this->assertEquals('application/json', $parsedResponse->contentType);
 	}
 
 	/**

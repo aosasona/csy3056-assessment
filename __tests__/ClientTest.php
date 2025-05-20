@@ -198,6 +198,7 @@ class ClientTest extends TestCase
 			'body' => 'world',
 			'userId' => 20,
 		]]);
+
 		$this->assertEquals('hello', $response->data->title);
 		$this->assertEquals('world', $response->data->body);
 		$this->assertEquals('20', $response->data->userId);
