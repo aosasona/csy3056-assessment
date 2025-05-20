@@ -26,8 +26,8 @@ class Serializer
 	{
 		$response = json_decode($response, true);
 		if ($this->client->isObject()) {
-			self::camelCaseArray($response);
-			return (object)$response;
+			$response = self::toObject($response);
+			return $response;
 		}
 		return (array)$response;
 	}
@@ -52,8 +52,7 @@ class Serializer
 			}
 		}
 		if ($this->client->isObject()) {
-			self::camelCaseArray($headers);
-			return (object)$headers;
+			return self::toObject($headers);
 		}
 		return $headers;
 	}
@@ -62,12 +61,18 @@ class Serializer
 	{
 		// Remove any leading or trailing whitespace
 		$string = trim($string);
-		// If the string is already in "camel case", return it as is
-		if (!preg_match('/[^a-zA-Z0-9]+/i', $string)) {
+
+		if (empty($string)) {
+			return '';
+		}
+
+		// If it is already in camel case, return it as is
+		if (preg_match('/^[a-z][a-zA-Z0-9]*$/', $string)) {
 			return $string;
 		}
-		$string = strtolower($string);
+
 		$string = preg_replace('/[^a-z0-9]+/i', ' ', $string);
+		$string = strtolower($string);
 		$string = ucwords($string);
 		return lcfirst(str_replace(' ', '', $string));
 	}
@@ -81,16 +86,31 @@ class Serializer
 	public static function camelCaseArray(array &$array): void
 	{
 		foreach ($array as $key => &$value) {
-			// Convert the key to camel case
-			$camelCaseKey = self::toCamelCase($key);
-			if ($camelCaseKey !== $key) {
-				unset($array[$key]);
-				$array[$camelCaseKey] = $value;
+			if (is_string($key)) {
+				// Convert the key to camel case
+				$camelCaseKey = self::toCamelCase($key);
+				if ($camelCaseKey !== $key) {
+					unset($array[$key]);
+					$array[$camelCaseKey] = $value;
+				}
 			}
+
 			// If the value is an array, recursively convert its keys
 			if (is_array($value)) {
 				self::camelCaseArray($value);
 			}
 		}
+	}
+
+	/**
+	 * Convert an array to an object.
+	 *
+	 * @param array $array
+	 * @return object
+	 */
+	public static function toObject(array &$array): object|array
+	{
+		self::camelCaseArray($array);
+		return json_decode(json_encode($array), false);
 	}
 }

@@ -125,4 +125,26 @@ class SerializerTest extends TestCase
 		Serializer::camelCaseArray($input);
 		self::assertEquals($expected, $input);
 	}
+
+	public function testToObject(): void
+	{
+		$input = [
+			"content-type" => "application/json",
+			"nested" => [
+				"content-length" => 123,
+				"another-nested" => [
+					"accept-encoding" => "gzip, deflate",
+				],
+			],
+		];
+
+		$expected = new \stdClass();
+		$expected->contentType = "application/json";
+		$expected->nested = new \stdClass();
+		$expected->nested->contentLength = 123;
+		$expected->nested->anotherNested = new \stdClass();
+		$expected->nested->anotherNested->acceptEncoding = "gzip, deflate";
+
+		self::assertEquals($expected, Serializer::toObject($input));
+	}
 }
