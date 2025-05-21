@@ -2,19 +2,13 @@
 
 declare(strict_types=1);
 
-use Burrow\Client;
+use Burrow\Lobsters;
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// TODO: refactor into a `Lobster` class
-// TODO: add item page
-$client = new Client([
-	"baseUrl" => "https://lobste.rs/active/page",
-	"object" => true,
-]);
-$page = $_GET['page'] ?? 1;
-$data = $client->get("/{$page}.json")->data;
+$page = (int)($_GET['page'] ?? 1);
+$data = Lobsters::shared()->getActiveItems($page);
 ?>
 <!DOCTYPE html>
 <html lang="en">
