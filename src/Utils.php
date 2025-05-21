@@ -10,7 +10,7 @@ namespace Burrow;
 use CurlHandle;
 use stdClass;
 
-class Utils
+final class Utils
 {
 	private Client $client;
 	private Serializer $serializer;

@@ -9,7 +9,7 @@ namespace Burrow;
 
 use stdClass;
 
-class Serializer
+final class Serializer
 {
 	private Client $client;
 

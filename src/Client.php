@@ -11,7 +11,7 @@ use stdClass;
 use Exception;
 use CurlHandle;
 
-class Client
+final class Client
 {
 	private false|CurlHandle $curl;
 	public string $baseUrl;
