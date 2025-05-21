@@ -11,6 +11,11 @@ use PHPUnit\Framework\TestCase;
 
 class SerializerTest extends TestCase
 {
+	/**
+	 * Create a mock client for testing
+	 * @param bool $object Whether to return objects or arrays
+	 * @return Client The mock client
+	 */
 	private static function makeMockClient(bool $object = true): Client
 	{
 		return new Client([
@@ -21,6 +26,7 @@ class SerializerTest extends TestCase
 
 	/**
 	 * Test parsing response body as an array
+	 * @covers \Burrow\Serializer::parseResponseBody()
 	 */
 	public function testParseResponseBodyAsArray(): void
 	{
@@ -37,6 +43,7 @@ class SerializerTest extends TestCase
 
 	/**
 	 * Test parsing response body as an object
+	 * @covers \Burrow\Serializer::parseResponseBody()
 	 */
 	public function testParseResponseBodyAsObject(): void
 	{
@@ -53,6 +60,7 @@ class SerializerTest extends TestCase
 
 	/**
 	 * Test parsing response headers as an array
+	 * @covers \Burrow\Serializer::parseResponseHeaders()
 	 */
 	public function testParseResponseHeaders(): void
 	{
@@ -68,6 +76,7 @@ class SerializerTest extends TestCase
 
 	/**
 	 * Test parsing response headers as an object
+	 * @covers \Burrow\Serializer::parseResponseHeaders()
 	 */
 	public function testParseResponseHeadersAsObject(): void
 	{
@@ -81,6 +90,10 @@ class SerializerTest extends TestCase
 		$this->assertEquals('123', $parsedHeaders->contentLength);
 	}
 
+	/**
+	 * Test toCamelCase conversion of array keys
+	 * @covers \Burrow\Serializer::parseResponseHeaders()
+	 */
 	public function testCamelCaseConversion(): void
 	{
 		$client = self::makeMockClient(object: true);
@@ -100,6 +113,10 @@ class SerializerTest extends TestCase
 		}
 	}
 
+	/**
+	 * Test camel-casing of nested arrays
+	 * @covers \Burrow\Serializer::parseResponseHeaders()
+	 */
 	public function testCamelCaseNestedArray(): void
 	{
 		$input = [
@@ -126,6 +143,10 @@ class SerializerTest extends TestCase
 		self::assertEquals($expected, $input);
 	}
 
+	/**
+	 * Test conversion of array to object
+	 * @covers \Burrow\Serializer::toObject()
+	 */
 	public function testToObject(): void
 	{
 		$input = [

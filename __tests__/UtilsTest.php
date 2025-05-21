@@ -12,6 +12,11 @@ use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase
 {
+	/**
+	 * Create a mock client for testing
+	 * @param bool $object Whether to return objects or arrays
+	 * @return Client
+	 */
 	private static function makeMockClient(bool $object = true): Client
 	{
 		return new Client([
@@ -20,6 +25,11 @@ class UtilsTest extends TestCase
 		]);
 	}
 
+	/**
+	 * * Test the makeHeaders method of the Utils class to ensure it correctly formats headers.
+	 * @test
+	 * @covers \Burrow\Utils::makeHeaders()
+	 */
 	public function testMakeHeaders(): void
 	{
 		$client = self::makeMockClient(object: false);
@@ -39,6 +49,11 @@ class UtilsTest extends TestCase
 		$this->assertEquals(array('Content-Type: text/html'), $headers);
 	}
 
+	/**
+	 * Test the `buildCurlOptions` method of the Utils class to ensure it correctly builds cURL options.
+	 * @test
+	 * @covers \Burrow\Utils::buildCurlOptions()
+	 */
 	public function testBuildCurlOptions(): void
 	{
 		$client = self::makeMockClient(object: false);

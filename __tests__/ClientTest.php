@@ -24,12 +24,20 @@ class ClientTest extends TestCase
 	}
 
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::__construct()
+	 */
 	public function testConstruct(): void
 	{
 		$client = new Client();
 		$this->assertInstanceOf(Client::class, $client);
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::__construct()
+	 */
 	public function testBaseURL(): void
 	{
 		$testURL = $this->url;
@@ -41,6 +49,10 @@ class ClientTest extends TestCase
 		$this->assertEquals('string', gettype($client->baseUrl));
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::makeHeaders()
+	 */
 	public function testMakeHeaders(): void
 	{
 		$client = new Client();
@@ -56,6 +68,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::request()
 	 */
 	public function testRequestAsArray(): void
 	{
@@ -75,6 +88,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::request()
 	 */
 	public function testRequestAsObject(): void
 	{
@@ -94,6 +108,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::get()
 	 */
 	public function testGetAsArray(): void
 	{
@@ -110,6 +125,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::get()
 	 */
 	public function testGetAsObject(): void
 	{
@@ -126,6 +142,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::post()
 	 */
 	public function testPostAsArray(): void
 	{
@@ -146,6 +163,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::post()
 	 */
 	public function testPostAsObject(): void
 	{
@@ -166,6 +184,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::delete()
 	 */
 	public function testDeleteShouldNotReturnBody(): void
 	{
@@ -182,6 +201,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::put()
 	 */
 	public function testPutShouldReplaceAllData(): void
 	{
@@ -206,6 +226,7 @@ class ClientTest extends TestCase
 
 	/**
 	 * @throws Exception
+	 * @covers \Burrow\Client::patch()
 	 */
 	public function testPatchShouldReplacePartially(): void
 	{
@@ -223,6 +244,11 @@ class ClientTest extends TestCase
 		$this->assertEquals('updated', $response->data->body);
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::setHeaders()
+	 * @covers \Burrow\Client::getHeader()
+	 */
 	public function testGetHeader(): void
 	{
 		$testURI = $this->url;
@@ -239,6 +265,11 @@ class ClientTest extends TestCase
 		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::setHeaders()
+	 * @covers \Burrow\Client::getHeader()
+	 */
 	public function testSetHeaders(): void
 	{
 		$testURI = $this->url;
@@ -255,6 +286,11 @@ class ClientTest extends TestCase
 		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::setHeader()
+	 * @covers \Burrow\Client::getHeader()
+	 */
 	public function testSetHeader(): void
 	{
 		$testURI = $this->url;
@@ -268,6 +304,12 @@ class ClientTest extends TestCase
 		$this->assertEquals('application/json', $client->getHeader('Content-Type'));
 	}
 
+	/**
+	 * @throws Exception
+	 * @covers \Burrow\Client::setHeaders()
+	 * @covers \Burrow\Client::removeHeader()
+	 * @covers \Burrow\Client::getHeader()
+	 */
 	public function testRemoveHeader(): void
 	{
 		$testURI = $this->url;
