@@ -1,48 +1,20 @@
-# Neat HTTP Client
-`EXPERIMENTAL`
+# Burrow
 
-A curL-based HTTP client. This is an experimental side-project, if you need something more robust and stable, you can check out [GuzzleHTTP](https://docs.guzzlephp.org/en/stable/). Feel free to fork or make a PR too :)
+## Pre-requisites
 
-## Requirements
-- PHP 8.0+
-- CurL extension (ENABLE IN `PHP.INI`)
+- PHP (>= 8.4)
+- Composer
 
-## Installation
+## Running locally
 
-```bash
-composer require trulyao/neat-http
+To run with Docker Compose:
+
+```sh
+docker compose up
 ```
 
-## Usage
+To run the tests:
 
-```php
-<?php
-
-use Burrow\Client;
-
-$client = new Client(
-    [
-        'baseUrl' => 'http://example.com',
-        'object' => true, // return object instead of array
-        'headers' => [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ],
-    ] // optional base config
-);
-
-$variable1 = $client->get('1');
-
-$variable2 = $client->post('', [
-    'data' => [
-         'title' => 'foo',
-         'body' => 'bar',
-         'userId' => 1,
-    ],
-]); // automatically serialized to JSON before sending
-       
+```sh
+composer test
 ```
-
-
-
-> Check `__tests__` for more usage example.
