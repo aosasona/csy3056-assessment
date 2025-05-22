@@ -13,10 +13,10 @@ RUN composer install --optimize-autoloader --no-interaction --no-progress && \
 FROM trafex/php-nginx:3.9.0
 
 # Use nobody user to avoid permission issues
-# USER nobody
+USER nobody
 
 # Copy files from the composer image to the final image
-COPY --chown=nginx --from=composer /app /var/www/html
+COPY --from=composer /app /var/www/html
 
 # Copy the nginx configuration file into the container
-COPY --chown=nginx ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
