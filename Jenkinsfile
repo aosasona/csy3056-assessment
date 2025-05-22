@@ -1,3 +1,18 @@
+// This Jenkinsfile handles the CI/CD pipeline for the Burrow application.
+//
+// Stage 1: Checkout repository
+// - The latest commit from the master branch of the GitHub repository is checked out to the Jenkins server.
+//
+// Stage 2: Build Docker image 
+// - In order to proceed to the other stages, the Docker image must be built first. The Dockerfile located in the root of the project is used for this.
+//
+// Stage 3: Run tests
+// - The built Docker image contains the necessary dependencies to run the test suite, so an ephemeral container is created to run the tests.
+//
+// Stage 4: Deploy
+// - The running container is stopped and removed if it exists.
+//The new built image is run in detached mode, and port 8080 in the container is mapped to port 8020 on the host.
+
 pipeline {
 	agent any
 
