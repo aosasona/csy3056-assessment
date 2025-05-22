@@ -1,4 +1,9 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This is the main entry point for the application, it sets up the router and serves the application.
+*/
 
 
 declare(strict_types=1);

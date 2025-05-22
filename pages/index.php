@@ -1,9 +1,13 @@
 <?php
+/*
+* Author: Ayodeji O.
+*
+* This file is responsible for rendering the homepage that displays the active items (with pagination).
+*/
 
 declare(strict_types=1);
 
 use Burrow\Lobsters;
-
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

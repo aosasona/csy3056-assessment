@@ -1,5 +1,13 @@
 <?php
 
+/*
+* Author: Ayodeji O.
+*
+* This file is responsible for rendering the item page.
+*
+* It fetches the item data from the Lobsters API and displays it in a user-friendly format.
+*/
+
 declare(strict_types=1);
 
 use Burrow\Lobsters;
