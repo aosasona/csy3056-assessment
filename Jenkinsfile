@@ -26,7 +26,7 @@ pipeline {
 		stage("Run tests") {
 			steps {
 				// Execute the PHPUnit tests inside the Docker container since they have been pre-installed in the Dockerfile (build)
-				sh "docker run --rm $IMAGE_NAME ./vendor/bin/phpunit __test_"
+				sh "docker run --rm $IMAGE_NAME ./vendor/bin/phpunit --bootstrap vendor/autoload.php ./__tests__/"
 			}
 		}
 
